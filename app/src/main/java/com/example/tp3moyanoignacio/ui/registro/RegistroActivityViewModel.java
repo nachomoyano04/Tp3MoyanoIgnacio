@@ -6,6 +6,8 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
@@ -61,7 +63,10 @@ public class RegistroActivityViewModel extends AndroidViewModel {
 
     public void leerDatos(boolean booleano){
         if(booleano){
-            mUsuario.setValue(ApiClient.leer(context));
+            Usuario u = ApiClient.leer(context);
+            avatar = u.getAvatar();
+            mUsuario.setValue(u);
+
         }
     }
 
@@ -70,7 +75,14 @@ public class RegistroActivityViewModel extends AndroidViewModel {
             Intent data = result.getData();
             Uri uri = data.getData();
             avatar = uri.toString();
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                context.getContentResolver().takePersistableUriPermission (uri, Intent.FLAG_GRANT_READ_URI_PERMISSION|Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            }
             mAvatar.setValue(uri);
         }
+    }
+
+    public void setAvatar(String avatar){
+        this.avatar = avatar;
     }
 }

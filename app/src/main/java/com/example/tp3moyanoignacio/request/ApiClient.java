@@ -30,7 +30,6 @@ public class ApiClient {
 
     public static Usuario login(Context context, String correo, String password){
         Usuario u = leer(context);
-        Log.d("variable",u.toString());
         if(u != null){
             if(u.getCorreo().equals(correo) && u.getPassword().equals(password)) {
                 return u;
